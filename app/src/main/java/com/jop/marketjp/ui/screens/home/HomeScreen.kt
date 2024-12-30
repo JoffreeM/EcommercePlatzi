@@ -39,8 +39,12 @@ fun HomeScreen(
         title = stringResource(id = R.string.home_home_title)
     ){
         val pages = listOf(
-            ItemTabPage(title = R.string.home_tab_home_title, composable = { HomeTabView() }),
-            ItemTabPage(title = R.string.home_tab_product_title, composable = { ProductTabView() })
+            ItemTabPage(title = R.string.home_tab_home_title, composable = {
+                HomeTabView(navController = navController)
+            }),
+            ItemTabPage(title = R.string.home_tab_product_title, composable = {
+                ProductTabView(navController = navController)
+            })
         )
         val coroutine = rememberCoroutineScope()
         val pagerState = rememberPagerState(
