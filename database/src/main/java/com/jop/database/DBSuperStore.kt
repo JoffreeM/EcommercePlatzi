@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.jop.database.dao.CartShoppingDao
 import com.jop.domain.entities.CartShoppingEntity
 
 @Database(
@@ -20,4 +21,5 @@ abstract class DBSuperStore : RoomDatabase() {
                 .build()
     }
 
+    abstract fun cartShoppingDao(): CartShoppingDao
 }

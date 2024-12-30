@@ -35,4 +35,5 @@
     <string name="product_subtitle_price">Precio:</string>
     <string name="product_subtitle_add_cart">Añadir</string>
     <string name="product_subtitle_description">Descripción</string>
+    <string name="product_add_cart_toast">Agregado a carrito</string>
 </resources>

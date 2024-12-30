@@ -38,6 +38,7 @@ import com.jop.marketjp.ui.composables.CustomSpace
 import com.jop.marketjp.ui.composables.CustomText
 import com.jop.marketjp.ui.composables.CustomToolBar
 import com.jop.marketjp.ui.composables.SimpleImage
+import com.jop.marketjp.ui.screens.product.details.view.event.ProductDetailsViewEvent
 import com.jop.marketjp.ui.screens.product.details.view.model.ProductDetailsViewModel
 import com.jop.marketjp.ui.screens.product.details.view.state.ProductDetailsViewState
 import com.jop.marketjp.ui.utils.cleanUrls
@@ -94,7 +95,9 @@ fun ProductDetailsScreen(
                         horizontalArrangement = Arrangement.SpaceAround,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Row {
+                        Row (
+                            verticalAlignment = Alignment.CenterVertically
+                        ){
                             CustomText(text = R.string.product_subtitle_price, fontSize = 18)
                             CustomSpace(width = 5)
                             CustomText(
@@ -108,7 +111,7 @@ fun ProductDetailsScreen(
                             text = R.string.product_subtitle_add_cart,
                             icon = R.drawable.ic_add_shopping_cart,
                             onClick = {
-
+                                viewModel.onEvent(ProductDetailsViewEvent.AddCart(product))
                             }
                         )
                     }

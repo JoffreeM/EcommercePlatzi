@@ -4,9 +4,10 @@ import android.app.Application
 import androidx.lifecycle.viewModelScope
 import com.jop.domain.models.product.ProductResponse
 import com.jop.marketjp.App
+import com.jop.marketjp.R
 import com.jop.marketjp.repository.products.ProductImp
+import com.jop.marketjp.repository.shopping.cart.local.LocalCartShoppingImp
 import com.jop.marketjp.ui.navigation.Params
-import com.jop.marketjp.ui.screens.home.view.state.HomeViewState
 import com.jop.marketjp.ui.screens.product.details.view.event.ProductDetailsViewEvent
 import com.jop.marketjp.ui.screens.product.details.view.state.ProductDetailsViewState
 import com.jop.marketjp.ui.utils.snackbar.IcoSnackbar
@@ -19,6 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProductDetailsViewModel @Inject constructor(
     private val productImp: ProductImp,
+    private val localCartShoppingImp: LocalCartShoppingImp,
     application: Application
 ): BaseViewModel(application) {
 
@@ -33,7 +35,8 @@ class ProductDetailsViewModel @Inject constructor(
         }
     }
     private fun addCartShopping(value: ProductResponse) = viewModelScope.launch {
-
+        localCartShoppingImp.insertCartShopping(value.onEntity())
+        showSnackbar(IcoSnackbar.CORRECT, getString(R.string.product_add_cart_toast))
     }
     private fun getOneProduct() = viewModelScope.launch {
         val productId = App.navigation[Params.PRODUCT_ID].castValue<Int>() ?: 0

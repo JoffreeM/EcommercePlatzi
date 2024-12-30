@@ -102,6 +102,7 @@ fun CustomSnackbar(
                                 .weight(1f)
                                 .padding(horizontal = 3.dp),
                             textAlign = TextAlign.Center,
+                            textColor = Color.Gray,
                             text = snackbarData.visuals.message
                         )
                         TextButton(
