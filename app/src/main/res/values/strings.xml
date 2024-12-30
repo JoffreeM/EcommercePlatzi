@@ -31,5 +31,8 @@
     <string name="category_order_button">Ordenar</string>
     <string name="category_filter_button">Filtrar</string>
 
-
+<!--    product screen-->
+    <string name="product_subtitle_price">Precio:</string>
+    <string name="product_subtitle_add_cart">Añadir</string>
+    <string name="product_subtitle_description">Descripción</string>
 </resources>

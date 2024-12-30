@@ -172,7 +172,7 @@ fun CategoryScreen(
 
 
 @Composable
-private fun CardCategoryView(
+fun CardCategoryView(
     urlImage: String,
     nameCategory: String
 ) {

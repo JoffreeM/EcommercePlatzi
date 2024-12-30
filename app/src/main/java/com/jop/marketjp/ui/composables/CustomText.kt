@@ -30,7 +30,7 @@ fun CustomText(
 
     ),
     overflow: TextOverflow = TextOverflow.Clip,
-    maxLines: Int = 5
+    maxLines: Int = Int.MAX_VALUE
 ){
     Row (
         modifier = modifier,
@@ -63,7 +63,7 @@ fun CustomText(
         fontSize = fontSize.sp
     ),
     overflow: TextOverflow = TextOverflow.Clip,
-    maxLines: Int = 5
+    maxLines: Int = Int.MAX_VALUE
 ){
     Row (
         modifier = modifier,

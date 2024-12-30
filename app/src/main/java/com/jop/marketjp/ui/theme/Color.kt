@@ -23,4 +23,4 @@ val Secondary = Color(0xFFFFCC80) // Naranja pálido como secundario
 val ErrorColor = Color(0xFFD32F2F) // Rojo para errores
 
 val ColorGrayGentle = Color(0xFFEBEBEB)
-val ColorDegradedPrimary = listOf(Color(0xFFEF6C00),Color(0xFFFFBA83))
+val ColorDegradedPrimary = listOf(Color(0xFFEF6C00),Color(0xFFFF9E51))
