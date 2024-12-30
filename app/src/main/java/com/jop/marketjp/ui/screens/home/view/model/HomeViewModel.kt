@@ -28,7 +28,10 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onEvent(event: HomeViewEvent){
-
+        when(event){
+            is HomeViewEvent.UpdateSearchProduct -> updateSearchProduct(event.value)
+            is HomeViewEvent.SearchProduct -> getProductsAll()
+        }
     }
 
     private fun getCategoryAll() = viewModelScope.launch {
@@ -69,7 +72,10 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
-
+    private fun updateSearchProduct(value: String){
+        val state: HomeViewState = currentViewState()
+        updateViewState(state.copy(searchProduct = value))
+    }
     private fun updateIsLoading(isLoading: Boolean){
         val state: HomeViewState = currentViewState()
         updateViewState(state.copy(isLoading = isLoading))

@@ -7,6 +7,12 @@ import kotlin.random.Random
 fun getRandomNumber(max: Int): Int {
     return Random.nextInt(0, max) // Genera un número entre 0 y max (inclusive)
 }
+fun List<String>.cleanUrls(): List<String> {
+    return this.map { url ->
+        // Usar expresión regular para eliminar caracteres no deseados
+        url.replace(Regex("[^a-zA-Z0-9:/?&=._-]"), "")
+    }
+}
 
 fun dynamicTextColor(colors: List<Color>?): Color {
     if (colors == null || colors.size < 2) return Color.Black

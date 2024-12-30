@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -32,8 +34,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.jop.marketjp.R
 import com.jop.marketjp.ui.theme.ColorDegradedPrimary
 import com.jop.marketjp.ui.utils.dynamicTextColor
 import kotlinx.coroutines.delay
@@ -219,6 +223,27 @@ fun CustomButton(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun CustomIconButton(
+    modifier: Modifier = Modifier,
+    sizeIcon: Dp = 25.dp,
+    tint: Color = MaterialTheme.colorScheme.primary,
+    @DrawableRes icon: Int,
+    onClick: () -> Unit
+){
+    IconButton(
+        modifier = modifier,
+        onClick = onClick
+    ) {
+        Icon(
+            modifier = Modifier.size(sizeIcon),
+            painter = painterResource(id = icon),
+            tint = tint,
+            contentDescription = null
+        )
     }
 }
 

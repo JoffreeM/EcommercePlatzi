@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -52,7 +53,7 @@ fun HomeScreen(
                 HomeTabView(navController = navController, state = state)
             }),
             ItemTabPage(title = R.string.home_tab_product_title, composable = {
-                ProductTabView(navController = navController, state = state)
+                ProductTabView(navController = navController, state = state, viewModel = viewModel)
             })
         )
         val coroutine = rememberCoroutineScope()
@@ -98,6 +99,7 @@ fun HomeScreen(
 
         HorizontalPager(
             modifier = Modifier.heightIn(max = 9900.dp),
+            verticalAlignment = Alignment.Top,
             state = pagerState,
             dragEnabled = true
         ) { page ->
