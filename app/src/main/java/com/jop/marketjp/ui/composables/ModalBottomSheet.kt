@@ -48,6 +48,7 @@ fun ModalBottomSheet(
     sheetState: ModalBottomSheetState,
     categoryList: List<CategoryResponse> = emptyList(),
     settingView: SettingView = SettingView.ORDER,
+    showFilterCategory: Boolean = true,
     onClickOrder: (SortOption) -> Unit = {},
     onClickFilter: (OptionsFilter) -> Unit = {},
     content: @Composable () -> Unit = {}
@@ -93,7 +94,7 @@ fun ModalBottomSheet(
                 )
                 when (settingView) {
                     SettingView.FILTER -> {
-                        FilterView(sheetState = sheetState, categoryList = categoryList, onClick = onClickFilter)
+                        FilterView(sheetState = sheetState, categoryList = categoryList, onClick = onClickFilter, showFilterCategory = showFilterCategory)
                     }
                     SettingView.ORDER -> {
                         OrderView(sheetState = sheetState, onClick = onClickOrder)
@@ -110,6 +111,7 @@ fun ModalBottomSheet(
 private fun FilterView(
     sheetState: ModalBottomSheetState,
     categoryList: List<CategoryResponse>,
+    showFilterCategory: Boolean,
     onClick: (OptionsFilter) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -132,49 +134,51 @@ private fun FilterView(
             fontWeight = FontWeight.Bold
         )
         CustomSpace(height = 15)
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            CustomText(text = R.string.filter_category_subtitle, fontWeight = FontWeight.Bold)
-            CustomIconButton(
-                icon = R.drawable.ic_arrow_down,
-                onClick = {
-                    showOptionCategory.value = !showOptionCategory.value
-                }
-            )
-        }
-        AnimatedVisibility(visible = showOptionCategory.value) {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(max = 9900.dp)
+        if (showFilterCategory){
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                items(categoryList) { category ->
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                selectedOptions = selectedOptions.copy(
-                                    categoryId = category.id
-                                )
-                            }
-                            .padding(vertical = 8.dp)
-                    ) {
-                        RadioButton(
-                            selected = selectedOptions.categoryId == category.id,
-                            onClick = {
-                                selectedOptions = selectedOptions.copy(
-                                    categoryId = category.id
-                                )
-                            }
-                        )
-                        CustomText(
-                            text = category.name,
-                            modifier = Modifier.padding(start = 8.dp)
-                        )
+                CustomText(text = R.string.filter_category_subtitle, fontWeight = FontWeight.Bold)
+                CustomIconButton(
+                    icon = R.drawable.ic_arrow_down,
+                    onClick = {
+                        showOptionCategory.value = !showOptionCategory.value
+                    }
+                )
+            }
+            AnimatedVisibility(visible = showOptionCategory.value) {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(max = 9900.dp)
+                ) {
+                    items(categoryList) { category ->
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    selectedOptions = selectedOptions.copy(
+                                        categoryId = category.id
+                                    )
+                                }
+                                .padding(vertical = 8.dp)
+                        ) {
+                            RadioButton(
+                                selected = selectedOptions.categoryId == category.id,
+                                onClick = {
+                                    selectedOptions = selectedOptions.copy(
+                                        categoryId = category.id
+                                    )
+                                }
+                            )
+                            CustomText(
+                                text = category.name,
+                                modifier = Modifier.padding(start = 8.dp)
+                            )
+                        }
                     }
                 }
             }
@@ -192,7 +196,7 @@ private fun FilterView(
                 }
             )
         }
-        AnimatedVisibility(visible = showOptionPrice.value) {
+        AnimatedVisibility(visible = showOptionPrice.value || !showFilterCategory) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween

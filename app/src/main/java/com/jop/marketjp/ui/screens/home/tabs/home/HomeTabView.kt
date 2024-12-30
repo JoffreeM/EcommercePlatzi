@@ -23,9 +23,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.jop.marketjp.App
 import com.jop.marketjp.R
 import com.jop.marketjp.ui.composables.CustomText
 import com.jop.marketjp.ui.composables.SimpleImage
+import com.jop.marketjp.ui.navigation.Params
 import com.jop.marketjp.ui.navigation.Screens
 import com.jop.marketjp.ui.screens.home.view.state.HomeViewState
 
@@ -46,6 +48,7 @@ fun HomeTabView(
                 TitleCategory(
                     title = item.name,
                     onClick = {
+                        App.navigation[Params.CATEGORY_ID] = item.id
                         navController.navigate(Screens.CATEGORY)
                     }
                 )
@@ -53,6 +56,7 @@ fun HomeTabView(
                     urlImage = item.image,
                     nameCategory = item.name,
                     onClick = {
+                        App.navigation[Params.CATEGORY_ID] = item.id
                         navController.navigate(Screens.CATEGORY)
                     }
                 )
@@ -99,7 +103,7 @@ private fun ItemCardCategory(
         elevation = CardDefaults.cardElevation(5.dp)
     ) {
         SimpleImage(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxWidth(),
             imageUrl = urlImage
         )
         Card (

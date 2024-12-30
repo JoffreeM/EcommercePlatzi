@@ -45,6 +45,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.jop.domain.models.product.ProductResponse
+import com.jop.marketjp.App
 import com.jop.marketjp.R
 import com.jop.marketjp.ui.composables.CustomIconButton
 import com.jop.marketjp.ui.composables.CustomInput
@@ -54,6 +55,7 @@ import com.jop.marketjp.ui.composables.ModalBottomSheet
 import com.jop.marketjp.ui.composables.SettingView
 import com.jop.marketjp.ui.composables.SimpleImage
 import com.jop.marketjp.ui.composables.SortOption
+import com.jop.marketjp.ui.navigation.Params
 import com.jop.marketjp.ui.navigation.Screens
 import com.jop.marketjp.ui.screens.home.view.event.HomeViewEvent
 import com.jop.marketjp.ui.screens.home.view.model.HomeViewModel
@@ -161,19 +163,21 @@ fun ProductTabView(
 }
 
 @Composable
-private fun ItemProduct(
+fun ItemProduct(
+    modifier: Modifier = Modifier,
     item: ProductResponse,
     navController: NavController
 ) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .padding(3.dp)
             .border(
                 width = 1.dp,
                 color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
-                shape = RoundedCornerShape(5.dp)
+                shape = RoundedCornerShape(8.dp)
             ),
         onClick = {
+            App.navigation[Params.PRODUCT_ID] = item.id
             navController.navigate(Screens.PRODUCT_DETAILS)
         },
         colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface),

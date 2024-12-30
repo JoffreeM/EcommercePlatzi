@@ -28,6 +28,6 @@ interface ApiService {
 
     @GET(ApiConstance.wsPath + "categories/{categoryId}/products")
     suspend fun getProductsOfCategory(
-        @Path("categoryId") id: Int
-    ): AliasResponseApi<List<CategoryResponse>>
+        @Path("categoryId") categoryId: Int
+    ): AliasResponseApi<List<ProductResponse>>
 }

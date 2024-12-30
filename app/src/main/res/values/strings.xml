@@ -28,7 +28,8 @@
     <string name="filter_input_price_min">Min</string>
 
 <!--    category-->
-    <string name="category_title"></string>
+    <string name="category_order_button">Ordenar</string>
+    <string name="category_filter_button">Filtrar</string>
 
 
 </resources>

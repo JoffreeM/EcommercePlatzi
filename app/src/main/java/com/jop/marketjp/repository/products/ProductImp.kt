@@ -18,4 +18,8 @@ class ProductImp @Inject constructor(
         apiService.getProductsAll(nameProduct, priceMin, priceMax, categoryId)
     }
 
+    override suspend fun getProductsOfCategory(categoryId: Int): Flow<NetworkResult<List<ProductResponse>>> = safeApiCall {
+        apiService.getProductsOfCategory(categoryId)
+    }
+
 }
