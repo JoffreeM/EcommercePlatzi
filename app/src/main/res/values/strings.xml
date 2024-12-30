@@ -9,4 +9,18 @@
 <!--    paging-->
     <string name="paging_msj_empty_data">No hay datos</string>
     <string name="paging_msj_error_data">Error al cargar</string>
+
+<!--    modal bottom sheet-->
+    <string name="price_order_title">Ordenar por precio</string>
+    <string name="price_order_asc">Precio de menor a mayor</string>
+    <string name="price_order_desc">Precio de mayor a menor</string>
+    <string name="price_order_apply">Aplicar</string>
+
+    <string name="filter_title">Filtrar</string>
+    <string name="filter_category_subtitle">Categoría</string>
+    <string name="filter_price_subtitle">Precio</string>
+    <string name="filter_clean">Limpiar</string>
+    <string name="filter_apply">Ver resultados</string>
+
+
 </resources>

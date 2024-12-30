@@ -21,6 +21,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -28,7 +30,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,13 +50,16 @@ import com.jop.marketjp.ui.composables.CustomIconButton
 import com.jop.marketjp.ui.composables.CustomInput
 import com.jop.marketjp.ui.composables.CustomSpace
 import com.jop.marketjp.ui.composables.CustomText
+import com.jop.marketjp.ui.composables.ModalBottomSheet
 import com.jop.marketjp.ui.composables.SimpleImage
+import com.jop.marketjp.ui.composables.SortOption
 import com.jop.marketjp.ui.navigation.Screens
 import com.jop.marketjp.ui.screens.home.view.event.HomeViewEvent
 import com.jop.marketjp.ui.screens.home.view.model.HomeViewModel
 import com.jop.marketjp.ui.screens.home.view.state.HomeViewState
 import com.jop.marketjp.ui.utils.cleanUrls
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun ProductTabView(
@@ -60,58 +67,75 @@ fun ProductTabView(
     state: HomeViewState,
     navController: NavController
 ) {
+    val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+    var orderOption by remember { mutableStateOf(SortOption.ASCENDING) }
+    val coroutineScope = rememberCoroutineScope()
     val keyboardController = LocalSoftwareKeyboardController.current
-    Column(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Row (
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ){
-            CustomInput(
-                modifier = Modifier,
-                value = state.searchProduct,
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Search,
-                    keyboardType = KeyboardType.Text
-                ),
-                keyboardActions = KeyboardActions(
-                    onSearch = {
-                        keyboardController?.hide()
-                        viewModel.onEvent(HomeViewEvent.SearchProduct)
-                    }
-                ),
-                trailingIcon = {
-                    CustomIconButton(
-                        icon = R.drawable.ic_search,
-                        onClick = {
+    ModalBottomSheet(
+        sheetState = sheetState,
+        onClickOrder = { orderOption = it }
+    ){
+        Column(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Row (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ){
+                CustomInput(
+                    modifier = Modifier,
+                    value = state.searchProduct,
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Search,
+                        keyboardType = KeyboardType.Text
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onSearch = {
+                            keyboardController?.hide()
                             viewModel.onEvent(HomeViewEvent.SearchProduct)
                         }
-                    )
-                },
-                onValueChange = {
-                    viewModel.onEvent(HomeViewEvent.UpdateSearchProduct(it))
+                    ),
+                    trailingIcon = {
+                        CustomIconButton(
+                            icon = R.drawable.ic_search,
+                            onClick = {
+                                viewModel.onEvent(HomeViewEvent.SearchProduct)
+                            }
+                        )
+                    },
+                    onValueChange = {
+                        viewModel.onEvent(HomeViewEvent.UpdateSearchProduct(it))
+                    }
+                )
+                CustomIconButton(
+                    icon = R.drawable.ic_order_list,
+                    sizeIcon = 40.dp,
+                    onClick = {
+                        coroutineScope.launch {
+                            sheetState.show()
+                        }
+                    }
+                )
+            }
+            CustomSpace(height = 3)
+            LazyVerticalStaggeredGrid(
+                modifier = Modifier.padding(5.dp),
+                columns = StaggeredGridCells.Fixed(2)
+            ) {
+                val sortedList = when (orderOption) {
+                    SortOption.ASCENDING -> state.listProducts.sortedBy { it.price }
+                    SortOption.DESCENDING -> state.listProducts.sortedByDescending { it.price }
                 }
-            )
-            CustomIconButton(
-                icon = R.drawable.ic_order_list,
-                sizeIcon = 40.dp,
-                onClick = {}
-            )
-        }
-        CustomSpace(height = 3)
-        LazyVerticalStaggeredGrid(
-            modifier = Modifier.padding(5.dp),
-            columns = StaggeredGridCells.Fixed(2)
-        ) {
-            items(state.listProducts) { item ->
-                ItemProduct(item = item, navController = navController)
+                items(sortedList) { item ->
+                    ItemProduct(item = item, navController = navController)
+                }
             }
         }
     }
+
 }
 
 @Composable
