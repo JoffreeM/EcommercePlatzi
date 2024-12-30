@@ -21,3 +21,5 @@ val TextLight = Color(0xFF212121) // Texto oscuro para tema claro
 val TextDark = Color(0xFFF5F5F5) // Texto claro para tema oscuro
 val Secondary = Color(0xFFFFCC80) // Naranja pálido como secundario
 val ErrorColor = Color(0xFFD32F2F) // Rojo para errores
+
+val ColorGrayGentle = Color(0xFFEBEBEB)

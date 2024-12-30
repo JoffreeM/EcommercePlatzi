@@ -102,4 +102,8 @@ dependencies {
     // paging 3
     implementation libs.androidx.paging.runtime
     implementation libs.androidx.paging.compose
+
+    //view pager
+    implementation libs.accompanist.pager
+    implementation libs.google.accompanist.pager.indicators
 }
