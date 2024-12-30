@@ -15,16 +15,16 @@ interface ApiService {
         @Path("productId") id: Int
     ): AliasResponseApi<ProductResponse>
 
+    @GET(ApiConstance.wsPath + "products")
+    suspend fun getProductsAll(
+        @Query("title") title: String
+    ): AliasResponseApi<List<ProductResponse>>
+
     @GET(ApiConstance.wsPath + "categories")
-    suspend fun getCategoryAll(
-        @Query("offset") offset: Int,
-        @Query("limit") limit: Int
-    ): AliasResponseApi<List<CategoryResponse>>
+    suspend fun getCategoryAll(): AliasResponseApi<List<CategoryResponse>>
 
     @GET(ApiConstance.wsPath + "categories/{categoryId}/products")
     suspend fun getProductsOfCategory(
-        @Path("categoryId") id: Int,
-        @Query("offset") offset: Int,
-        @Query("limit") limit: Int
+        @Path("categoryId") id: Int
     ): AliasResponseApi<List<CategoryResponse>>
 }

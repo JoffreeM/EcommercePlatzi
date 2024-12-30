@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -24,27 +26,35 @@ import androidx.navigation.NavController
 import com.jop.marketjp.R
 import com.jop.marketjp.ui.composables.CustomText
 import com.jop.marketjp.ui.composables.SimpleImage
+import com.jop.marketjp.ui.navigation.Screens
+import com.jop.marketjp.ui.screens.home.view.state.HomeViewState
 
 @Composable
 fun HomeTabView(
+    state: HomeViewState,
     navController: NavController
 ){
     LazyColumn(
         modifier = Modifier.fillMaxWidth()
     ) {
-        items(listOf("","","","","")){
+        items(state.listCategory){ item ->
             Column (
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(10.dp)
             ){
                 TitleCategory(
-                    title = "Categoria 1",
-                    onClick = {}
+                    title = item.name,
+                    onClick = {
+                        navController.navigate(Screens.CATEGORY)
+                    }
                 )
                 ItemCardCategory(
-                    urlImage = "",
-                    onClick = {}
+                    urlImage = item.image,
+                    nameCategory = item.name,
+                    onClick = {
+                        navController.navigate(Screens.CATEGORY)
+                    }
                 )
             }
         }
@@ -76,10 +86,10 @@ private fun TitleCategory(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ItemCardCategory(
     urlImage: String,
+    nameCategory: String,
     onClick: () -> Unit
 ){
     Card(
@@ -92,5 +102,17 @@ private fun ItemCardCategory(
             modifier = Modifier.fillMaxSize(),
             imageUrl = urlImage
         )
+        Card (
+            modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
+            shape = CircleShape,
+            colors = CardDefaults.cardColors(MaterialTheme.colorScheme.primary),
+            elevation = CardDefaults.cardElevation(15.dp)
+        ){
+            CustomText(
+                modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
+                text = nameCategory,
+                fontSize = 18
+            )
+        }
     }
 }

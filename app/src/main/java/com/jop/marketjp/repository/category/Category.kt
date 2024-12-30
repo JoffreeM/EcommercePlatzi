@@ -1,9 +1,9 @@
 package com.jop.marketjp.repository.category
 
-import androidx.paging.PagingData
 import com.jop.domain.models.category.CategoryResponse
+import com.jop.webs.NetworkResult
 import kotlinx.coroutines.flow.Flow
 
 interface Category {
-    suspend fun getCategoryAll(): Flow<PagingData<CategoryResponse>>
+    suspend fun getCategoryAll(): Flow<NetworkResult<List<CategoryResponse>>>
 }

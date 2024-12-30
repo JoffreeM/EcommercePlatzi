@@ -9,6 +9,8 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -17,22 +19,29 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
 import com.jop.marketjp.R
+import com.jop.marketjp.ui.composables.CustomLoading
 import com.jop.marketjp.ui.composables.CustomText
 import com.jop.marketjp.ui.composables.CustomToolBar
 import com.jop.marketjp.ui.screens.home.data.ItemTabPage
 import com.jop.marketjp.ui.screens.home.tabs.home.HomeTabView
 import com.jop.marketjp.ui.screens.home.tabs.product.ProductTabView
+import com.jop.marketjp.ui.screens.home.view.model.HomeViewModel
+import com.jop.marketjp.ui.screens.home.view.state.HomeViewState
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun HomeScreen(
+    viewModel: HomeViewModel = hiltViewModel(),
     navController: NavController
 ){
+    val state by viewModel.getState<HomeViewState>().collectAsState()
+    CustomLoading(isLoading = state.isLoading)
     CustomToolBar(
         navController = navController,
         showIcoLauncher = true,
@@ -40,10 +49,10 @@ fun HomeScreen(
     ){
         val pages = listOf(
             ItemTabPage(title = R.string.home_tab_home_title, composable = {
-                HomeTabView(navController = navController)
+                HomeTabView(navController = navController, state = state)
             }),
             ItemTabPage(title = R.string.home_tab_product_title, composable = {
-                ProductTabView(navController = navController)
+                ProductTabView(navController = navController, state = state)
             })
         )
         val coroutine = rememberCoroutineScope()

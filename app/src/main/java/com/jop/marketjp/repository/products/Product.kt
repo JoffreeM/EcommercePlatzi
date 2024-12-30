@@ -6,4 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface Product {
     suspend fun getOneProduct(productId: Int): Flow<NetworkResult<ProductResponse>>
+    suspend fun getProductAll(nameProduct: String): Flow<NetworkResult<List<ProductResponse>>>
 }

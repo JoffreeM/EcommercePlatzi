@@ -13,6 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
 
 @Composable
@@ -28,6 +29,7 @@ fun CustomText(
         fontSize = fontSize.sp,
 
     ),
+    overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = 5
 ){
     Row (
@@ -41,7 +43,8 @@ fun CustomText(
             textAlign = textAlign,
             color = textColor,
             fontWeight = fontWeight,
-            maxLines = maxLines
+            maxLines = maxLines,
+            overflow = overflow
         )
     }
 }
@@ -59,6 +62,7 @@ fun CustomText(
     style: TextStyle = TextStyle.Default.copy(
         fontSize = fontSize.sp
     ),
+    overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = 5
 ){
     Row (
@@ -72,7 +76,8 @@ fun CustomText(
             textAlign = textAlign,
             color = textColor,
             fontWeight = fontWeight,
-            maxLines = maxLines
+            maxLines = maxLines,
+            overflow = overflow
         )
     }
 }

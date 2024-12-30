@@ -2,6 +2,7 @@ package com.jop.marketjp.source.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.jop.marketjp.source.paging.utils.PagingSetting
 import com.jop.marketjp.source.paging.utils.ResponseWrapper
 
 class BasePagingSource<T : Any>(
@@ -13,12 +14,14 @@ class BasePagingSource<T : Any>(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, T> {
         return try {
-            val offset = params.key ?: 0
-            val limit = params.loadSize // Tamaño de la página
+            val page = params.key ?: 0
+            val offset = page * PagingSetting.MAX_ITEMS
+            val limit = PagingSetting.MAX_ITEMS
+
             val response = apiCall(offset, limit)
 
-            val nextKey = if (response.items.isNotEmpty()) offset + limit else null
-            val prevKey = if (offset > 0) offset - limit else null
+            val prevKey = if (page > 0) page - 1 else null
+            val nextKey = if (response.items.isNotEmpty()) page + 1 else null
 
             LoadResult.Page(
                 data = response.items,

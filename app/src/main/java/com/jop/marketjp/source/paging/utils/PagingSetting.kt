@@ -7,7 +7,7 @@ import com.jop.marketjp.source.paging.BasePagingSource
 import kotlinx.coroutines.flow.Flow
 
 object PagingSetting {
-    private const val MAX_ITEMS = 10
+    const val MAX_ITEMS = 10
     private const val PREFETCH_ITEMS = 3
 
     fun <T : Any> createPager(
