@@ -51,6 +51,7 @@ import com.jop.marketjp.ui.composables.CustomInput
 import com.jop.marketjp.ui.composables.CustomSpace
 import com.jop.marketjp.ui.composables.CustomText
 import com.jop.marketjp.ui.composables.ModalBottomSheet
+import com.jop.marketjp.ui.composables.SettingView
 import com.jop.marketjp.ui.composables.SimpleImage
 import com.jop.marketjp.ui.composables.SortOption
 import com.jop.marketjp.ui.navigation.Screens
@@ -69,11 +70,20 @@ fun ProductTabView(
 ) {
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     var orderOption by remember { mutableStateOf(SortOption.ASCENDING) }
+    var optionSheet by remember { mutableStateOf(SettingView.ORDER) }
     val coroutineScope = rememberCoroutineScope()
     val keyboardController = LocalSoftwareKeyboardController.current
     ModalBottomSheet(
+        settingView = optionSheet,
+        categoryList = state.listCategory,
         sheetState = sheetState,
-        onClickOrder = { orderOption = it }
+        onClickOrder = { orderOption = it },
+        onClickFilter = {
+            viewModel.onEvent(HomeViewEvent.UpdatePriceMax(it.priceMax))
+            viewModel.onEvent(HomeViewEvent.UpdatePriceMin(it.priceMin))
+            viewModel.onEvent(HomeViewEvent.UpdateCategoryId(it.categoryId))
+            viewModel.onEvent(HomeViewEvent.SearchProduct)
+        }
     ){
         Column(
             modifier = Modifier.fillMaxWidth()
@@ -87,6 +97,7 @@ fun ProductTabView(
             ){
                 CustomInput(
                     modifier = Modifier,
+                    placeholder = R.string.home_tab_product_input_search,
                     value = state.searchProduct,
                     keyboardOptions = KeyboardOptions(
                         imeAction = ImeAction.Search,
@@ -115,6 +126,17 @@ fun ProductTabView(
                     sizeIcon = 40.dp,
                     onClick = {
                         coroutineScope.launch {
+                            optionSheet = SettingView.ORDER
+                            sheetState.show()
+                        }
+                    }
+                )
+                CustomIconButton(
+                    icon = R.drawable.ic_filter,
+                    sizeIcon = 40.dp,
+                    onClick = {
+                        coroutineScope.launch {
+                            optionSheet = SettingView.FILTER
                             sheetState.show()
                         }
                     }
@@ -244,11 +266,18 @@ private fun AutoImageAnimation(
                     fadeIn() with fadeOut()
                 }, label = ""
             ) { targetImage ->
+                // Verifica que el índice esté dentro de los límites antes de acceder
+                val imageUrl = try {
+                    val safeIndex = targetImage.coerceIn(0, listImage.cleanUrls().size - 1)
+                    listImage.cleanUrls()[safeIndex]
+                }catch (ex: Exception){
+                    ""
+                }
                 SimpleImage(
                     modifier = Modifier
                         .clip(RoundedCornerShape(20.dp))
                         .size(200.dp),
-                    imageUrl = listImage.cleanUrls()[targetImage]
+                    imageUrl = imageUrl
                 )
             }
         }

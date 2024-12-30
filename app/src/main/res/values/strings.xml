@@ -6,6 +6,9 @@
     <string name="home_tab_home_title">Home</string>
     <string name="home_tab_product_title">Productos</string>
 
+<!--    products-->
+    <string name="home_tab_product_input_search">Buscar...</string>
+
 <!--    paging-->
     <string name="paging_msj_empty_data">No hay datos</string>
     <string name="paging_msj_error_data">Error al cargar</string>
@@ -21,6 +24,11 @@
     <string name="filter_price_subtitle">Precio</string>
     <string name="filter_clean">Limpiar</string>
     <string name="filter_apply">Ver resultados</string>
+    <string name="filter_input_price_max">Max</string>
+    <string name="filter_input_price_min">Min</string>
+
+<!--    category-->
+    <string name="category_title"></string>
 
 
 </resources>

@@ -7,12 +7,16 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material3.Icon
@@ -29,9 +33,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.jop.domain.models.category.CategoryResponse
 import com.jop.marketjp.R
+import com.jop.marketjp.ui.utils.isValidInt
 import kotlinx.coroutines.launch
 
 @Composable
@@ -40,6 +49,7 @@ fun ModalBottomSheet(
     categoryList: List<CategoryResponse> = emptyList(),
     settingView: SettingView = SettingView.ORDER,
     onClickOrder: (SortOption) -> Unit = {},
+    onClickFilter: (OptionsFilter) -> Unit = {},
     content: @Composable () -> Unit = {}
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -50,9 +60,9 @@ fun ModalBottomSheet(
             sheetState.hide()
         }
     }
-    LaunchedEffect(key1 = !sheetState.isVisible){
+    LaunchedEffect(key1 = !sheetState.isVisible) {
         keyboardController?.hide()
-        if (!sheetState.isVisible){
+        if (!sheetState.isVisible) {
 
         }
     }
@@ -81,38 +91,53 @@ fun ModalBottomSheet(
                     tint = MaterialTheme.colorScheme.secondary,
                     contentDescription = ""
                 )
-                when(settingView){
+                when (settingView) {
                     SettingView.FILTER -> {
-                        FilterView(categoryList = categoryList, onClick = {})
+                        FilterView(sheetState = sheetState, categoryList = categoryList, onClick = onClickFilter)
                     }
                     SettingView.ORDER -> {
-                        OrderView(sheetState = sheetState,onClick = onClickOrder)
+                        OrderView(sheetState = sheetState, onClick = onClickOrder)
                     }
                 }
             }
         }
-    ){
+    ) {
         content()
     }
 }
 
 @Composable
 private fun FilterView(
+    sheetState: ModalBottomSheetState,
     categoryList: List<CategoryResponse>,
-    onClick: (CategoryResponse) -> Unit
-){
+    onClick: (OptionsFilter) -> Unit
+) {
+    val coroutineScope = rememberCoroutineScope()
     val showOptionCategory = remember { mutableStateOf(false) }
     val showOptionPrice = remember { mutableStateOf(false) }
+    var priceMinValue by remember { mutableStateOf("") }
+    var priceMaxValue by remember { mutableStateOf("") }
 
-    var selectedOption by remember { mutableStateOf<CategoryResponse?>(null) }
-    Column(modifier = Modifier.padding(16.dp)) {
-        CustomText(text = R.string.filter_title)
-        CustomSpace(height = 10)
-        Row (
+    var selectedOptions by remember { mutableStateOf(OptionsFilter()) }
+    Column(
+        modifier = Modifier
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState())
+    ) {
+        CustomText(
             modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center,
+            text = R.string.filter_title,
+            fontSize = 18,
+            fontWeight = FontWeight.Bold
+        )
+        CustomSpace(height = 15)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
-        ){
-            CustomText(text = R.string.filter_category_subtitle)
+        ) {
+            CustomText(text = R.string.filter_category_subtitle, fontWeight = FontWeight.Bold)
             CustomIconButton(
                 icon = R.drawable.ic_arrow_down,
                 onClick = {
@@ -121,25 +146,29 @@ private fun FilterView(
             )
         }
         AnimatedVisibility(visible = showOptionCategory.value) {
-            LazyColumn (
-                modifier = Modifier.fillMaxWidth()
-            ){
-                items(categoryList){ category ->
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(max = 9900.dp)
+            ) {
+                items(categoryList) { category ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-                                selectedOption = category
-                                onClick(category) // Invoca la acción con la categoría seleccionada
+                                selectedOptions = selectedOptions.copy(
+                                    categoryId = category.id
+                                )
                             }
                             .padding(vertical = 8.dp)
                     ) {
                         RadioButton(
-                            selected = selectedOption == category,
+                            selected = selectedOptions.categoryId == category.id,
                             onClick = {
-                                selectedOption = category
-                                onClick(category)
+                                selectedOptions = selectedOptions.copy(
+                                    categoryId = category.id
+                                )
                             }
                         )
                         CustomText(
@@ -150,11 +179,12 @@ private fun FilterView(
                 }
             }
         }
-        Row (
+        Row(
             modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
-        ){
-            CustomText(text = R.string.filter_price_subtitle)
+        ) {
+            CustomText(text = R.string.filter_price_subtitle, fontWeight = FontWeight.Bold)
             CustomIconButton(
                 icon = R.drawable.ic_arrow_down,
                 onClick = {
@@ -163,25 +193,84 @@ private fun FilterView(
             )
         }
         AnimatedVisibility(visible = showOptionPrice.value) {
-            Row (
+            Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
-            ){
+            ) {
                 CustomInput(
-                    value = "",
-                    onValueChange = {},
+                    modifier = Modifier.width(150.dp),
+                    placeholder = R.string.filter_input_price_min,
+                    value = priceMinValue,
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Search,
+                        keyboardType = KeyboardType.Phone
+                    ),
+                    onValueChange = {
+                        if (it.isValidInt()){
+                            selectedOptions = selectedOptions.copy(
+                                priceMin = it.toIntOrNull()
+                            )
+                            priceMinValue = it
+                        }
+                    },
                     leadingIcon = {
-                        Icon(painter = painterResource(id = R.drawable.ic_money), tint = MaterialTheme.colorScheme.primary, contentDescription = null)
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_money),
+                            tint = MaterialTheme.colorScheme.primary,
+                            contentDescription = null
+                        )
                     }
                 )
+                CustomSpace(width = 5)
                 CustomInput(
-                    value = "",
-                    onValueChange = {},
+                    modifier = Modifier.width(150.dp),
+                    placeholder = R.string.filter_input_price_max,
+                    value = priceMaxValue,
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Search,
+                        keyboardType = KeyboardType.Phone
+                    ),
+                    onValueChange = {
+                        if (it.isValidInt()){
+                            selectedOptions = selectedOptions.copy(
+                                priceMax = it.toIntOrNull()
+                            )
+                            priceMaxValue = it
+                        }
+                    },
                     leadingIcon = {
-                        Icon(painter = painterResource(id = R.drawable.ic_money), tint = MaterialTheme.colorScheme.primary, contentDescription = null)
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_money),
+                            tint = MaterialTheme.colorScheme.primary,
+                            contentDescription = null
+                        )
                     }
                 )
             }
+        }
+        CustomSpace(height = 10)
+        Row (
+            modifier = Modifier.fillMaxWidth().padding(5.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ){
+            CustomButton(
+                modifier = Modifier.width(150.dp),
+                text = R.string.filter_clean,
+                onClick = {
+                    selectedOptions = OptionsFilter()
+                }
+            )
+            CustomButton(
+                modifier = Modifier.width(150.dp),
+                text = R.string.price_order_apply,
+                onClick = {
+                    coroutineScope.launch {
+                        sheetState.hide()
+                        onClick(selectedOptions)
+                    }
+                }
+            )
         }
     }
 }
@@ -190,11 +279,17 @@ private fun FilterView(
 private fun OrderView(
     sheetState: ModalBottomSheetState,
     onClick: (SortOption) -> Unit
-){
+) {
     val coroutineScope = rememberCoroutineScope()
     var selectedOption by remember { mutableStateOf(SortOption.ASCENDING) }
     Column(modifier = Modifier.padding(16.dp)) {
-        CustomText(text = R.string.price_order_title)
+        CustomText(
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center,
+            text = R.string.price_order_title,
+            fontSize = 18,
+            fontWeight = FontWeight.Bold
+        )
         CustomSpace(height = 15)
         Row(verticalAlignment = Alignment.CenterVertically) {
             RadioButton(
@@ -212,10 +307,10 @@ private fun OrderView(
             CustomText(text = R.string.price_order_desc, modifier = Modifier.padding(start = 8.dp))
         }
         CustomSpace(height = 15)
-        Row (
+        Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.End
-        ){
+        ) {
             CustomButton(
                 modifier = Modifier.width(200.dp),
                 text = R.string.price_order_apply,
@@ -230,7 +325,13 @@ private fun OrderView(
     }
 }
 
-enum class SettingView{
+data class OptionsFilter(
+    val categoryId: Int? = null,
+    val priceMin: Int? = null,
+    val priceMax: Int? = null,
+)
+
+enum class SettingView {
     FILTER,
     ORDER
 }

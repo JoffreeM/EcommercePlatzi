@@ -8,5 +8,8 @@ data class HomeViewState(
     val isLoading: Boolean = false,
     val listCategory: List<CategoryResponse> = emptyList(),
     val listProducts: List<ProductResponse> = emptyList(),
-    val searchProduct: String = ""
+    val searchProduct: String = "",
+    val priceMax: Int? = null,
+    val priceMin: Int? = null,
+    val categoryId: Int? = null
 ): ViewState()

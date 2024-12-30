@@ -14,6 +14,10 @@ fun List<String>.cleanUrls(): List<String> {
     }
 }
 
+fun String.isValidDouble(): Boolean = this.isEmpty() || this.matches(Regex("^\\d*\\.?\\d*\$"))
+fun String.isValidInt(): Boolean = this.isEmpty() || this.toIntOrNull() != null
+
+
 fun dynamicTextColor(colors: List<Color>?): Color {
     if (colors == null || colors.size < 2) return Color.Black
     return try {

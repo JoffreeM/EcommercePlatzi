@@ -17,7 +17,10 @@ interface ApiService {
 
     @GET(ApiConstance.wsPath + "products")
     suspend fun getProductsAll(
-        @Query("title") title: String
+        @Query("title") title: String,
+        @Query("price_min") priceMin: Int?,
+        @Query("price_max") priceMax: Int?,
+        @Query("categoryId") categoryId: Int?,
     ): AliasResponseApi<List<ProductResponse>>
 
     @GET(ApiConstance.wsPath + "categories")

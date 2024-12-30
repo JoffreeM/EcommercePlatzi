@@ -30,6 +30,9 @@ class HomeViewModel @Inject constructor(
     fun onEvent(event: HomeViewEvent){
         when(event){
             is HomeViewEvent.UpdateSearchProduct -> updateSearchProduct(event.value)
+            is HomeViewEvent.UpdateCategoryId -> updateCategoryId(event.value)
+            is HomeViewEvent.UpdatePriceMax -> updatePriceMax(event.value)
+            is HomeViewEvent.UpdatePriceMin -> updatePriceMin(event.value)
             is HomeViewEvent.SearchProduct -> getProductsAll()
         }
     }
@@ -55,7 +58,12 @@ class HomeViewModel @Inject constructor(
 
     private fun getProductsAll() = viewModelScope.launch {
         val state: HomeViewState = currentViewState()
-        productImp.getProductAll(state.searchProduct).collect {
+        productImp.getProductAll(
+            nameProduct = state.searchProduct,
+            priceMin = state.priceMin,
+            priceMax = state.priceMax,
+            categoryId = state.categoryId
+        ).collect {
             when(it){
                 is NetworkResult.Loading -> updateIsLoading(true)
                 is NetworkResult.Error -> {
@@ -71,6 +79,18 @@ class HomeViewModel @Inject constructor(
                 }
             }
         }
+    }
+    private fun updateCategoryId(value: Int? = null){
+        val state: HomeViewState = currentViewState()
+        updateViewState(state.copy(categoryId = value))
+    }
+    private fun updatePriceMax(value: Int? = null){
+        val state: HomeViewState = currentViewState()
+        updateViewState(state.copy(priceMax = value))
+    }
+    private fun updatePriceMin(value: Int? = null){
+        val state: HomeViewState = currentViewState()
+        updateViewState(state.copy(priceMin = value))
     }
     private fun updateSearchProduct(value: String){
         val state: HomeViewState = currentViewState()

@@ -14,8 +14,8 @@ class ProductImp @Inject constructor(
         apiService.getOneProduct(productId)
     }
 
-    override suspend fun getProductAll(nameProduct: String): Flow<NetworkResult<List<ProductResponse>>> = safeApiCall {
-        apiService.getProductsAll(nameProduct)
+    override suspend fun getProductAll(nameProduct: String, priceMin: Int?, priceMax: Int?, categoryId: Int?): Flow<NetworkResult<List<ProductResponse>>> = safeApiCall {
+        apiService.getProductsAll(nameProduct, priceMin, priceMax, categoryId)
     }
 
 }
