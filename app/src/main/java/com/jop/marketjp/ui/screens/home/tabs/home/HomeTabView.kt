@@ -1,6 +1,5 @@
 package com.jop.marketjp.ui.screens.home.tabs.home
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,6 +14,7 @@ import androidx.compose.material.IconButton
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -67,7 +67,11 @@ private fun TitleCategory(
         IconButton(
             onClick = onClick
         ) {
-            Icon(painter = painterResource(id = R.drawable.ic_arrow_right), contentDescription = null)
+            Icon(
+                painter = painterResource(id = R.drawable.ic_arrow_right),
+                tint = MaterialTheme.colorScheme.onBackground,
+                contentDescription = null
+            )
         }
     }
 }

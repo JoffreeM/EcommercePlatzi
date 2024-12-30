@@ -76,7 +76,7 @@ fun HomeScreen(
                             textAlign = TextAlign.Center,
                             text = page.title,
                             fontSize = 14,
-                            textColor = if (indexPage.intValue == index) MaterialTheme.colorScheme.primary else Color.DarkGray
+                            textColor = if (indexPage.intValue == index) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground
                         )
                     }
                 )

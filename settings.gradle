@@ -21,3 +21,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "MarketJP"
 include ':app'
+include ':database'
+include ':domain'
+include ':webs'

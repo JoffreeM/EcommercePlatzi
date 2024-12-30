@@ -1,23 +1,18 @@
 package com.jop.marketjp.ui.composables
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.border
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
@@ -28,9 +23,10 @@ fun CustomText(
     fontWeight: FontWeight = FontWeight.Normal,
     alignContent: Arrangement.Horizontal = Arrangement.Start,
     textAlign: TextAlign = TextAlign.Start,
-    textColor: Color = Color.DarkGray,
+    textColor: Color = MaterialTheme.colorScheme.onBackground,
     style: TextStyle = TextStyle.Default.copy(
-        fontSize = fontSize.sp
+        fontSize = fontSize.sp,
+
     ),
     maxLines: Int = 5
 ){
@@ -59,7 +55,7 @@ fun CustomText(
     fontWeight: FontWeight = FontWeight.Normal,
     alignContent: Arrangement.Horizontal = Arrangement.Start,
     textAlign: TextAlign = TextAlign.Start,
-    textColor: Color = Color.DarkGray,
+    textColor: Color = MaterialTheme.colorScheme.onBackground,
     style: TextStyle = TextStyle.Default.copy(
         fontSize = fontSize.sp
     ),
