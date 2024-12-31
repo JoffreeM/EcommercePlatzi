@@ -162,7 +162,10 @@ fun CategoryScreen(
                     ItemProduct(
                         modifier = Modifier.padding(10.dp),
                         item = item,
-                        navController = navController
+                        navController = navController,
+                        onClickAddCart = {
+                            viewModel.onEvent(CategoryViewEvent.AddCartShopping(item))
+                        }
                     )
                 }
             }

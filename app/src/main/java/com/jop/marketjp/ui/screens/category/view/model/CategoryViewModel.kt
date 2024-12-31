@@ -2,8 +2,11 @@ package com.jop.marketjp.ui.screens.category.view.model
 
 import android.app.Application
 import androidx.lifecycle.viewModelScope
+import com.jop.domain.models.product.ProductResponse
 import com.jop.marketjp.App
+import com.jop.marketjp.R
 import com.jop.marketjp.repository.products.ProductImp
+import com.jop.marketjp.repository.shopping.cart.local.LocalCartShoppingImp
 import com.jop.marketjp.ui.navigation.Params
 import com.jop.marketjp.ui.screens.category.view.event.CategoryViewEvent
 import com.jop.marketjp.ui.screens.category.view.state.CategoryViewState
@@ -17,6 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CategoryViewModel @Inject constructor(
     private val productImp: ProductImp,
+    private val localCartShoppingImp: LocalCartShoppingImp,
     application: Application
 ): BaseViewModel(application) {
 
@@ -31,9 +35,16 @@ class CategoryViewModel @Inject constructor(
             is CategoryViewEvent.UpdatePriceMax -> updatePriceMax(event.value)
             is CategoryViewEvent.UpdatePriceMin -> updatePriceMin(event.value)
             is CategoryViewEvent.SearchProduct -> filterDataLocale()
+            is CategoryViewEvent.AddCartShopping -> addCartShopping(event.value)
             is CategoryViewEvent.RefreshProduct -> getProductsOfCategory()
         }
     }
+
+    private fun addCartShopping(value: ProductResponse) = viewModelScope.launch {
+        localCartShoppingImp.insertCartShopping(value.onEntity())
+        showSnackbar(IcoSnackbar.CORRECT, getString(R.string.product_add_cart_toast))
+    }
+
     private fun filterDataLocale(){
         val state: CategoryViewState = currentViewState()
 

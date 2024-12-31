@@ -86,17 +86,17 @@ fun ProductTabView(
             viewModel.onEvent(HomeViewEvent.UpdateCategoryId(it.categoryId))
             viewModel.onEvent(HomeViewEvent.SearchProduct)
         }
-    ){
+    ) {
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            Row (
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 12.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
-            ){
+            ) {
                 CustomInput(
                     modifier = Modifier,
                     placeholder = R.string.home_tab_product_input_search,
@@ -154,7 +154,11 @@ fun ProductTabView(
                     SortOption.DESCENDING -> state.listProducts.sortedByDescending { it.price }
                 }
                 items(sortedList) { item ->
-                    ItemProduct(item = item, navController = navController)
+                    ItemProduct(
+                        item = item, navController = navController, onClickAddCart = {
+                            viewModel.onEvent(HomeViewEvent.AddCartShopping(item))
+                        }
+                    )
                 }
             }
         }
@@ -166,7 +170,8 @@ fun ProductTabView(
 fun ItemProduct(
     modifier: Modifier = Modifier,
     item: ProductResponse,
-    navController: NavController
+    navController: NavController,
+    onClickAddCart: (ProductResponse) -> Unit = {}
 ) {
     Card(
         modifier = modifier
@@ -226,13 +231,15 @@ fun ItemProduct(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Column {
-                    CustomText(text = "Precio", fontSize = 14)
+                    CustomText(text = R.string.product_subtitle_price, fontSize = 14)
                     CustomText(text = "$ ${item.price}", fontSize = 17)
                 }
                 CustomIconButton(
                     icon = R.drawable.ic_add_shopping_cart,
                     sizeIcon = 40.dp,
-                    onClick = {}
+                    onClick = {
+                        onClickAddCart(item)
+                    }
                 )
             }
         }
@@ -245,14 +252,14 @@ private fun AutoImageAnimation(
     modifier: Modifier = Modifier,
     listImage: List<String>
 ) {
-    if (listImage.size<=1){
+    if (listImage.size <= 1) {
         SimpleImage(
             modifier = Modifier
                 .clip(RoundedCornerShape(20.dp))
                 .size(200.dp),
             imageUrl = listImage.first()
         )
-    }else{
+    } else {
         var currentImage by remember { mutableIntStateOf(0) }
         LaunchedEffect(Unit) {
             while (true) {
@@ -274,7 +281,7 @@ private fun AutoImageAnimation(
                 val imageUrl = try {
                     val safeIndex = targetImage.coerceIn(0, listImage.cleanUrls().size - 1)
                     listImage.cleanUrls()[safeIndex]
-                }catch (ex: Exception){
+                } catch (ex: Exception) {
                     ""
                 }
                 SimpleImage(

@@ -3,8 +3,11 @@ package com.jop.marketjp.ui.screens.home.view.model
 import android.app.Application
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
+import com.jop.domain.models.product.ProductResponse
+import com.jop.marketjp.R
 import com.jop.marketjp.repository.category.CategoryImp
 import com.jop.marketjp.repository.products.ProductImp
+import com.jop.marketjp.repository.shopping.cart.local.LocalCartShoppingImp
 import com.jop.marketjp.ui.screens.home.view.event.HomeViewEvent
 import com.jop.marketjp.ui.screens.home.view.state.HomeViewState
 import com.jop.marketjp.ui.utils.snackbar.IcoSnackbar
@@ -18,6 +21,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val categoryImp: CategoryImp,
     private val productImp: ProductImp,
+    private val localCartShoppingImp: LocalCartShoppingImp,
     application: Application
 ): BaseViewModel(application){
 
@@ -33,10 +37,14 @@ class HomeViewModel @Inject constructor(
             is HomeViewEvent.UpdateCategoryId -> updateCategoryId(event.value)
             is HomeViewEvent.UpdatePriceMax -> updatePriceMax(event.value)
             is HomeViewEvent.UpdatePriceMin -> updatePriceMin(event.value)
+            is HomeViewEvent.AddCartShopping -> addCartShopping(event.value)
             is HomeViewEvent.SearchProduct -> getProductsAll()
         }
     }
-
+    private fun addCartShopping(value: ProductResponse) = viewModelScope.launch {
+        localCartShoppingImp.insertCartShopping(value.onEntity())
+        showSnackbar(IcoSnackbar.CORRECT, getString(R.string.product_add_cart_toast))
+    }
     private fun getCategoryAll() = viewModelScope.launch {
         categoryImp.getCategoryAll().collect {
             when(it){
