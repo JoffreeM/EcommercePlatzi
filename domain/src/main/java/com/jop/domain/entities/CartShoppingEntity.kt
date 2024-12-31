@@ -8,6 +8,7 @@ data class CartShoppingEntity(
     @PrimaryKey
     val id: Int,
     val nameProduct: String,
+    val amount: Int = 1,
     val price: Double,
     val image: String,
     val nameCategory: String

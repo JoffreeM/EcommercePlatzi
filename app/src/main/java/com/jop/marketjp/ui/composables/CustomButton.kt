@@ -230,12 +230,14 @@ fun CustomButton(
 fun CustomIconButton(
     modifier: Modifier = Modifier,
     sizeIcon: Dp = 25.dp,
+    enabled: Boolean = true,
     tint: Color = MaterialTheme.colorScheme.primary,
     @DrawableRes icon: Int,
     onClick: () -> Unit
 ){
     IconButton(
         modifier = modifier,
+        enabled = enabled,
         onClick = onClick
     ) {
         Icon(

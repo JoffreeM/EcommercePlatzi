@@ -23,4 +23,8 @@ class LocalCartShoppingImp @Inject constructor(
     override fun getCountCartShopping(): Flow<Int> {
         return dbSuperStore.cartShoppingDao().getCountCartShopping()
     }
+
+    override suspend fun updateAmount(id: Int, newAmount: Int) {
+        return dbSuperStore.cartShoppingDao().updateAmount(id, newAmount)
+    }
 }

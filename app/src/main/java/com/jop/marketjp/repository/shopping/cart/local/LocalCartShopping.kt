@@ -8,4 +8,5 @@ interface LocalCartShopping {
     suspend fun deleteCartById(id: Int)
     fun getAllCartShopping(): Flow<List<CartShoppingEntity>>
     fun getCountCartShopping(): Flow<Int>
+    suspend fun updateAmount(id: Int, newAmount: Int)
 }

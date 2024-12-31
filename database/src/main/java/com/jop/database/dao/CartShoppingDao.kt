@@ -18,6 +18,9 @@ interface CartShoppingDao {
     @Query("SELECT * FROM cart_shopping")
     fun getAllCartShopping(): Flow<List<CartShoppingEntity>>
 
+    @Query("UPDATE cart_shopping SET amount = :newAmount WHERE id = :id")
+    suspend fun updateAmount(id: Int, newAmount: Int)
+
     @Query("SELECT COUNT(*) FROM cart_shopping")
     fun getCountCartShopping(): Flow<Int>
 }

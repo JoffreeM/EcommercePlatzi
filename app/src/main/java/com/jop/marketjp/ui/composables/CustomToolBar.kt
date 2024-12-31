@@ -161,8 +161,8 @@ private fun TopBar(
 
             if (showIconCart) {
                 BadgedBox(badge = {
-                    Badge {
-                        if (cartCountFlow>=1){
+                    if (cartCountFlow>=1){
+                        Badge {
                             CustomText(text = "$cartCountFlow", fontSize = 11, textColor = Color.White)
                         }
                     }
