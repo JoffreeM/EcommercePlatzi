@@ -35,6 +35,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -159,52 +161,72 @@ private fun ItemCartShopping(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Card(
-                    modifier = Modifier,
-                    shape = CircleShape,
-                    colors = CardDefaults.cardColors(MaterialTheme.colorScheme.primary),
-                    elevation = CardDefaults.cardElevation(15.dp)
-                ) {
-                    CustomText(
-                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
-                        text = item.nameCategory,
-                        fontSize = 16
+                CustomText(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 4.dp),
+                    textAlign = TextAlign.Start,
+                    text = item.nameProduct,
+                    fontWeight = FontWeight.Bold,
+                    overflow = TextOverflow.Ellipsis,
+                    fontSize = 18
+                )
+                CustomSpace(height = 10)
+                Row (
+                    modifier = Modifier.fillMaxWidth().padding(start = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ){
+                    Column {
+                        Card(
+                            modifier = Modifier,
+                            shape = CircleShape,
+                            colors = CardDefaults.cardColors(MaterialTheme.colorScheme.primary),
+                            elevation = CardDefaults.cardElevation(15.dp)
+                        ) {
+                            CustomText(
+                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
+                                text = item.nameCategory,
+                                fontSize = 16
+                            )
+                        }
+                        CustomSpace(height = 6)
+                        Row {
+                            CustomText(text = R.string.product_subtitle_price_uni, fontSize = 15)
+                            CustomSpace(width = 5)
+                            CustomText(
+                                text = "$ ${item.price}",
+                                fontSize = 16,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                        CustomSpace(height = 6)
+                        Row {
+                            CustomText(text = R.string.product_subtitle_price_sub, fontSize = 15)
+                            CustomSpace(width = 5)
+                            CustomText(
+                                text = "$ ${item.amount * item.price}",
+                                fontSize = 16,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+                    NumberSpinner(
+                        value = item.amount,
+                        onValueChange = {
+                            viewModel.onEvent(
+                                ShoppingCartViewEvent.UpdateChangeAmount(
+                                    id = item.id,
+                                    newAmount = it
+                                )
+                            )
+                        }
                     )
                 }
-                CustomSpace(height = 6)
-                Column {
-                    Row {
-                        CustomText(text = R.string.product_subtitle_price_uni, fontSize = 15)
-                        CustomSpace(width = 5)
-                        CustomText(
-                            text = "$ ${item.price}",
-                            fontSize = 16,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                    CustomSpace(height = 6)
-                    Row {
-                        CustomText(text = R.string.product_subtitle_price_sub, fontSize = 15)
-                        CustomSpace(width = 5)
-                        CustomText(
-                            text = "$ ${item.amount * item.price}",
-                            fontSize = 16,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
+
+
             }
-            NumberSpinner(
-                value = item.amount,
-                onValueChange = {
-                    viewModel.onEvent(
-                        ShoppingCartViewEvent.UpdateChangeAmount(
-                            id = item.id,
-                            newAmount = it
-                        )
-                    )
-                }
-            )
+
         }
     }
 }
