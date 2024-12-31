@@ -6,7 +6,7 @@
 
 [![Ver Repositorio](https://badgen.net/badge/Ver%20en/GitHub/black)](https://github.com/JoffreeM/EcommercePlatzi)
 
-**Super Store** He creado una app ecommerce de demostración llamado Super Store que muestra mi habilidad para implementar estructuras de código sólidas en Kotlin. Este proyecto incluye dos pantallas principales: una para registro y otra para login. Aunque no está conectado a una base de datos o backend, el código refleja buenas prácticas y principios fundamentales:.
+**Super Store** He creado una app ecommerce de demostración llamado Super Store que muestra mi habilidad para implementar estructuras de código sólidas en Kotlin. Este proyecto incluye una variedad de pantallas: una para listas las categorias de productos, para listar los productos con sus filtros, para mostrar los productos de una categoria, para ver los detalles de un productos, para agregar productos al carrito de compras. El código refleja buenas prácticas y principios fundamentales:.
 
 ## 🚀 Características Clave
 
@@ -21,8 +21,9 @@
 - **Lenguaje Principal:** ![Kotlin](https://badgen.net/badge/Lenguaje/Kotlin/purple)
 - **Framework:** ![Jetpack Compose](https://badgen.net/badge/Framework/Jetpack%20Compose/blue)
 - **Base de Datos Platzi:** ![Platzi](https://badgen.net/badge/Backend/Platzi/green)
+- **Base de Datos ROOM:** ![ROOM](https://badgen.net/badge/Backend/ROOM/purple)
 - **Control de Versiones:** ![GitHub](https://badgen.net/badge/Control%20de%20Versiones/GitHub/black)
-- **Diseño:** ![Miro](https://badgen.net/badge/Colaboración/Miro/pink)
+- **Diseño:** ![Adobe Photoshop](https://badgen.net/badge/Diseño/Photoshop/blue) | ![Miro](https://badgen.net/badge/Colaboración/Miro/pink)
 
 ## 🌟 Más sobre la Aplicación
 
